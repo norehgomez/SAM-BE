@@ -1,17 +1,17 @@
 <?php
-// Database connection
+
 $conn = new mysqli("127.0.0.1", "root", "", "corememories");
 
-// Check connection
+
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch Islands of Personality
+
 $default_islands_query = "SELECT * FROM islandsofpersonality WHERE status='active'";
 $islands_result = $conn->query($default_islands_query);
 
-// Fetch Island Contents
+
 $contents_query = "SELECT * FROM islandcontents";
 $contents_result = $conn->query($contents_query);
 $island_contents = [];
@@ -56,7 +56,7 @@ while ($content = $contents_result->fetch_assoc()) {
 </head>
 <body>
 
-<!-- Top menu -->
+
 <div class="w3-top">
     <div class="w3-bar w3-black w3-xlarge">
         <a href="#home" class="w3-bar-item w3-button">Home</a>
@@ -64,13 +64,12 @@ while ($content = $contents_result->fetch_assoc()) {
     </div>
 </div>
 
-<!-- Home Section -->
+
 <div class="w3-container w3-padding-64 w3-center" id="home">
     <h1>Inside Out</h1>
     <p>Explore the core memories and personality islands that define who we are.</p>
 </div>
 
-<!-- Islands of Personality -->
 <div class="w3-container w3-padding-64" id="islands">
     <h2 class="w3-center">Islands of Personality</h2>
     <?php if ($islands_result->num_rows > 0): ?>
@@ -97,7 +96,7 @@ while ($content = $contents_result->fetch_assoc()) {
                         <?php else: ?>
                             <p>No memories available for this island.</p>
                         <?php endif; ?>
-                    </div
+                    </div>
                 </div>
             <?php endwhile; ?>
         </div>
@@ -106,7 +105,6 @@ while ($content = $contents_result->fetch_assoc()) {
     <?php endif; ?>
 </div>
 
-<!-- Footer -->
 <footer class="w3-center w3-black w3-padding-32">
     <p>Powered by Inside Out | Core Memories</p>
 </footer>
