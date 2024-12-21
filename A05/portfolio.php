@@ -18,7 +18,7 @@ $contents_result = $conn->query($contents_query);
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Inside Out - Core Memories</title>
+    <title>Noreh Lei - Core Memories</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
