@@ -1,117 +1,140 @@
 <?php
-
-$conn = new mysqli("127.0.0.1", "root", "", "corememories");
+// Database connection (optional, can be used to dynamically fetch portfolio projects)
+$conn = new mysqli("127.0.0.1", "root", "", "portfolio_database");
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$default_islands_query = "SELECT * FROM islandsofpersonality WHERE status='active'";
-$islands_result = $conn->query($default_islands_query);
+// Optional: Fetch portfolio projects from the database
+$sql = "SELECT * FROM projects ORDER BY created_at DESC";
+$projects_result = $conn->query($sql);
 
-$contents_query = "SELECT * FROM islandcontents";
-$contents_result = $conn->query($contents_query);
-$island_contents = [];
-while ($content = $contents_result->fetch_assoc()) {
-    $island_contents[$content['islandOfPersonalityID']][] = $content;
-}
+// Close the database connection after fetching data
+$conn->close();
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Inside Out - Core Memories</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Portfolio</title>
     <style>
-        body, h1, h2, h3, h4, h5, h6 {
-            font-family: "Karma", sans-serif;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
         }
-        .w3-bar-block .w3-bar-item {
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
             padding: 20px;
         }
-        .island-card {
-            margin-bottom: 20px;
-            border: 2px solid #ccc;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
+        .profile {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
         }
-        .island-content {
-            margin: 10px 5px;
-            padding: 10px;
-            border-radius: 5px;
+        .profile img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+        .profile h1 {
+            font-size: 2.5em;
+        }
+        .profile p {
+            font-size: 1.2em;
+            color: #555;
+        }
+        .skills, .projects {
+            margin-top: 40px;
+        }
+        .skills ul, .projects ul {
+            list-style: none;
+            padding: 0;
+        }
+        .skills li, .projects li {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+        .projects .project-card {
+            background-color: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .projects .project-card img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        footer {
+            text-align: center;
+            background-color: #333;
             color: white;
-            text-align: center;
-        }
-        .island-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .island-content img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
+            padding: 10px 0;
         }
     </style>
 </head>
 <body>
 
-<div class="w3-top">
-    <div class="w3-bar w3-black w3-xlarge">
-        <a href="#home" class="w3-bar-item w3-button">Home</a>
-        <a href="#islands" class="w3-bar-item w3-button">Islands</a>
-    </div>
-</div>
+<header>
+    <h1>Welcome to My Portfolio</h1>
+</header>
 
-<div class="w3-container w3-padding-64 w3-center" id="home">
-    <h1>Inside Out</h1>
-    <p>Explore the core memories and personality islands that define who we are.</p>
-</div>
-
-<div class="w3-container w3-padding-64" id="islands">
-    <h2 class="w3-center">Islands of Personality</h2>
-    <?php if ($islands_result->num_rows > 0): ?>
-        <div class="w3-row-padding">
-            <?php while ($island = $islands_result->fetch_assoc()): ?>
-                <div class="w3-quarter island-card" style="background-color: <?= $island['color'] ?>;">
-                    <h3><?= $island['name'] ?></h3>
-                    <p><?= $island['shortDescription'] ?></p>
-                    <img src="images/<?= $island['image'] ?>" alt="<?= $island['name'] ?>" class="w3-image">
-                    <div class="w3-row-padding">
-                        <?php if (!empty($island_contents[$island['islandOfPersonalityID']])): ?>
-                            <?php foreach ($island_contents[$island['islandOfPersonalityID']] as $index => $content): ?>
-                                <?php if ($index % 2 === 0): ?>
-                                    <div class="w3-row-padding">
-                                <?php endif; ?>
-                                <div class="w3-col s6 island-content" style="background-color: <?= $content['color'] ?>;">
-                                    <img src="images/<?= $content['image'] ?>" alt="<?= $content['content'] ?>">
-                                    <p><?= $content['content'] ?></p>
-                                </div>
-                                <?php if ($index % 2 === 1 || $index === count($island_contents[$island['islandOfPersonalityID']]) - 1): ?>
-                                    </div>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p>No memories available for this island.</p>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            <?php endwhile; ?>
+<div class="container">
+    <section class="profile">
+        <img src="images/profile.jpg" alt="Your Profile Picture">
+        <div>
+            <h1>John Doe</h1>
+            <p>Web Developer | Designer | Problem Solver</p>
         </div>
-    <?php else: ?>
-        <p>No islands available.</p>
-    <?php endif; ?>
+    </section>
+
+    <section class="skills">
+        <h2>Skills</h2>
+        <ul>
+            <li>HTML & CSS</li>
+            <li>JavaScript & jQuery</li>
+            <li>PHP & MySQL</li>
+            <li>React.js</li>
+            <li>UI/UX Design</li>
+        </ul>
+    </section>
+
+    <section class="projects">
+        <h2>My Projects</h2>
+        <ul>
+            <?php if ($projects_result->num_rows > 0): ?>
+                <?php while ($project = $projects_result->fetch_assoc()): ?>
+                    <li class="project-card">
+                        <h3><?= htmlspecialchars($project['title']) ?></h3>
+                        <img src="images/<?= htmlspecialchars($project['image']) ?>" alt="<?= htmlspecialchars($project['title']) ?>">
+                        <p><?= htmlspecialchars($project['description']) ?></p>
+                        <a href="<?= htmlspecialchars($project['url']) ?>" target="_blank">View Project</a>
+                    </li>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <li>No projects available at the moment.</li>
+            <?php endif; ?>
+        </ul>
+    </section>
 </div>
 
-<footer class="w3-center w3-black w3-padding-32">
-    <p>Powered by Inside Out | Core Memories</p>
+<footer>
+    <p>&copy; 2024 John Doe | Web Developer</p>
 </footer>
 
 </body>
 </html>
-<?php
-$conn->close();
-?>
