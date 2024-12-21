@@ -2,15 +2,12 @@
 
 $conn = new mysqli("127.0.0.1", "root", "", "corememories");
 
-
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
 $default_islands_query = "SELECT * FROM islandsofpersonality WHERE status='active'";
 $islands_result = $conn->query($default_islands_query);
-
 
 $contents_query = "SELECT * FROM islandcontents";
 $contents_result = $conn->query($contents_query);
@@ -48,14 +45,19 @@ while ($content = $contents_result->fetch_assoc()) {
             color: white;
             text-align: center;
         }
+        .island-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
         .island-content img {
-            max-height: 100px;
+            width: 100%;
+            height: 100px;
             object-fit: cover;
         }
     </style>
 </head>
 <body>
-
 
 <div class="w3-top">
     <div class="w3-bar w3-black w3-xlarge">
@@ -64,12 +66,10 @@ while ($content = $contents_result->fetch_assoc()) {
     </div>
 </div>
 
-
 <div class="w3-container w3-padding-64 w3-center" id="home">
     <h1>Inside Out</h1>
     <p>Explore the core memories and personality islands that define who we are.</p>
 </div>
-
 
 <div class="w3-container w3-padding-64" id="islands">
     <h2 class="w3-center">Islands of Personality</h2>
@@ -79,7 +79,7 @@ while ($content = $contents_result->fetch_assoc()) {
                 <div class="w3-quarter island-card" style="background-color: <?= $island['color'] ?>;">
                     <h3><?= $island['name'] ?></h3>
                     <p><?= $island['shortDescription'] ?></p>
-                    <img src="images/<?= $island['image'] ?>" alt="<?= $island['name'] ?>" class="w3-image" style="max-width: 100%; height: auto;">
+                    <img src="images/<?= $island['image'] ?>" alt="<?= $island['name'] ?>" class="w3-image">
                     <div class="w3-row-padding">
                         <?php if (!empty($island_contents[$island['islandOfPersonalityID']])): ?>
                             <?php foreach ($island_contents[$island['islandOfPersonalityID']] as $index => $content): ?>
@@ -105,7 +105,6 @@ while ($content = $contents_result->fetch_assoc()) {
         <p>No islands available.</p>
     <?php endif; ?>
 </div>
-
 
 <footer class="w3-center w3-black w3-padding-32">
     <p>Powered by Inside Out | Core Memories</p>
