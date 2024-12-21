@@ -2,15 +2,12 @@
 
 $conn = new mysqli("127.0.0.1", "root", "", "corememories");
 
-
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
 $default_islands_query = "SELECT * FROM islandsofpersonality WHERE status='active'";
 $islands_result = $conn->query($default_islands_query);
-
 
 $contents_query = "SELECT * FROM islandcontents";
 $contents_result = $conn->query($contents_query);
@@ -34,6 +31,18 @@ while ($content = $contents_result->fetch_assoc()) {
         .w3-bar-block .w3-bar-item {
             padding: 20px;
         }
+        .portfolio-card {
+            margin-bottom: 20px;
+            border: 2px solid #ccc;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .portfolio-card img {
+            border-radius: 50%;
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
         .island-card {
             margin-bottom: 20px;
             border: 2px solid #ccc;
@@ -56,11 +65,40 @@ while ($content = $contents_result->fetch_assoc()) {
 </head>
 <body>
 
-
 <div class="w3-top">
     <div class="w3-bar w3-black w3-xlarge">
         <a href="#home" class="w3-bar-item w3-button">Home</a>
+        <a href="#portfolio" class="w3-bar-item w3-button">Portfolio</a>
         <a href="#islands" class="w3-bar-item w3-button">Islands</a>
+    </div>
+</div>
+
+<!-- Portfolio Section -->
+<div class="w3-container w3-padding-64 w3-center" id="portfolio">
+    <h1>My Portfolio</h1>
+    <div class="portfolio-card">
+        <img src="images/your-photo.jpg" alt="Your Photo">
+        <h2>Your Name</h2>
+        <p>A short description about yourself. For example, you can mention your profession, passion, or hobbies. 
+           Here you can write about your goals and what you are interested in.</p>
+    </div>
+
+    <div class="portfolio-card">
+        <h3>Skills & Expertise</h3>
+        <ul>
+            <li>Web Development</li>
+            <li>Graphic Design</li>
+            <li>Content Writing</li>
+            <li>Project Management</li>
+        </ul>
+    </div>
+
+    <div class="portfolio-card">
+        <h3>Recent Projects</h3>
+        <ul>
+            <li><strong>Project 1:</strong> Description of a recent project you completed.</li>
+            <li><strong>Project 2:</strong> Description of another recent project you worked on.</li>
+        </ul>
     </div>
 </div>
 
@@ -69,6 +107,7 @@ while ($content = $contents_result->fetch_assoc()) {
     <h1>Inside Out</h1>
     <p>Explore the core memories and personality islands that define who we are.</p>
 </div>
+
 
 <div class="w3-container w3-padding-64" id="islands">
     <h2 class="w3-center">Islands of Personality</h2>
@@ -79,6 +118,8 @@ while ($content = $contents_result->fetch_assoc()) {
                     <h3><?= $island['name'] ?></h3>
                     <p><?= $island['shortDescription'] ?></p>
                     <img src="images/<?= $island['image'] ?>" alt="<?= $island['name'] ?>" class="w3-image" style="max-width: 100%; height: auto;">
+                    
+                    
                     <div class="w3-row-padding">
                         <?php if (!empty($island_contents[$island['islandOfPersonalityID']])): ?>
                             <?php foreach ($island_contents[$island['islandOfPersonalityID']] as $index => $content): ?>
